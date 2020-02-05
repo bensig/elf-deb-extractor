@@ -18,7 +18,7 @@ for i in $(find $DIR -name "*.deb")
     find . -name "data.tar.xz" -exec tar -xvf {} -C $UNTAR_DIR \;
     cd $UNTAR_DIR
 # test if files are ELF, if they are ELF then move them to $ELF_DIR
-	find . -type f -executable -exec file {} \; | grep "ELF"| cut -d: -f1| while read LINE; do
+	find . -type f -print0 | xargs -0 file | grep ELF| cut -d: -f1| grep -Ev ".sh$|.o$|.py$|.so$|.so.[0-9]$|.so.[0-9].[0-9]" while read LINE; do
         mv $LINE $ELF_DIR
       done
    done
